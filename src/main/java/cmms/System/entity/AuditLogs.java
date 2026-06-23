@@ -38,9 +38,9 @@ public class AuditLogs {
     @Column(name = "changed_data", columnDefinition = "jsonb")
     private String changedData;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "performed_by_id", nullable = true)
-//    private Users performedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performed_by_id", nullable = true)
+    private Users performedBy;
 
     @Column(name = "ip_address")
     private String ipAddress;
