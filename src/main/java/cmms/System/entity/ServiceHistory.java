@@ -5,9 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "service_history")
@@ -21,7 +26,7 @@ public class ServiceHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many service logs can be tied to a single Vehicle (linked via vehicle's primary key or custom join column)
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id", nullable = false)
     private VehicleInventory vehicle;
@@ -38,13 +43,36 @@ public class ServiceHistory {
     private ServiceType serviceType;
 
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal cost; // Service layer must validate cost >= 0
+    private BigDecimal cost;
 
     @Column(columnDefinition = "text")
     private String remarks;
+
+    @CreatedDate
+    @Builder.Default
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
+    private LocalDateTime createdAt = LocalDateTime.parse("2026-06-23T19:54:30");
+
+    @CreatedBy
+    @Builder.Default
+    @Column(name = "created_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+    private Long createdBy = 1L;
+
+    @LastModifiedDate
+    @Builder.Default
+    @Column(name = "last_modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
+    private LocalDateTime lastModifiedAt = LocalDateTime.parse("2026-06-23T19:54:30");
+
+    @LastModifiedBy
+    @Builder.Default
+    @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+    private Long lastModifiedBy = 1L;
+
 
 
     public enum ServiceType {
         ROUTINE, WARRANTY, REPAIR, RECALL
     }
+
+
 }
