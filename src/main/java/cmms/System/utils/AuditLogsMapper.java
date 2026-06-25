@@ -4,10 +4,12 @@ import cmms.System.Dto.AuditLogResponseDto;
 import cmms.System.Dto.AuditLogsRequestDto;
 import cmms.System.entity.AuditLogs;
 import cmms.System.entity.AuditLogs.AuditAction;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuditLogsMapper {
 
-    public static AuditLogs AuditlogsRequestDtoToAuditLogs (AuditLogsRequestDto dto) {
+    public  AuditLogs AuditlogsRequestDtoToAuditLogs (AuditLogsRequestDto dto) {
 
         if (dto == null) {
             return null;
@@ -23,7 +25,7 @@ public class AuditLogsMapper {
     }
 
 
-    public static AuditLogResponseDto toResponseDto(AuditLogs entity) {
+    public AuditLogResponseDto toResponseDto(AuditLogs entity) {
 
         if (entity == null) {
             return null;

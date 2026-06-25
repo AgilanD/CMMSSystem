@@ -15,6 +15,7 @@ import java.util.List;
 public class AuditLogsServiceImpl implements AuditLogsService{
 
     private final AuditLogsRepository auditLogsRepository;
+    private final AuditLogsMapper auditLogsMapper;
 
     public List<AuditLogs> GetAllAuditLogs(){
         return auditLogsRepository.findAll();
@@ -26,9 +27,9 @@ public class AuditLogsServiceImpl implements AuditLogsService{
 
     public AuditLogResponseDto CreateAuditLogs (AuditLogsRequestDto auditLogsRequestDto){
 
-        AuditLogs auditLogs = AuditLogsMapper.AuditlogsRequestDtoToAuditLogs(auditLogsRequestDto);
+        AuditLogs auditLogs = auditLogsMapper.AuditlogsRequestDtoToAuditLogs(auditLogsRequestDto);
         AuditLogs auditLogsSaved = auditLogsRepository.save(auditLogs);
-        return AuditLogsMapper.toResponseDto(auditLogsSaved);
+        return auditLogsMapper.toResponseDto(auditLogsSaved);
 
     }
 

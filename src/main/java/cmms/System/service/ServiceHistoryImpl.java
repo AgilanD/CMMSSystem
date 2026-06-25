@@ -3,7 +3,7 @@ package cmms.System.service;
 import cmms.System.Dto.ServiceHistoryRequestDto;
 import cmms.System.Dto.ServiceHistoryResponseDto;
 import cmms.System.entity.ServiceHistory;
-import cmms.System.mapper.ServiceHistoryMapper;
+import cmms.System.utils.ServiceHistoryMapper;
 import cmms.System.repository.ServiceHistoryRepository;
 import cmms.System.repository.VehicleInventoryRepository; // Assuming this exists
 import cmms.System.service.ServiceHistoryService;
