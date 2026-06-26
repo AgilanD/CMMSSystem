@@ -1,5 +1,6 @@
 package cmms.System.entity;
 
+import cmms.System.common.entity.VehicleInventory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

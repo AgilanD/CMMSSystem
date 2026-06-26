@@ -1,4 +1,4 @@
-package cmms.System.entity;
+package cmms.System.common.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -5,8 +5,7 @@ import cmms.System.Dto.ServiceHistoryResponseDto;
 import cmms.System.entity.ServiceHistory;
 import cmms.System.utils.ServiceHistoryMapper;
 import cmms.System.repository.ServiceHistoryRepository;
-import cmms.System.repository.VehicleInventoryRepository; // Assuming this exists
-import cmms.System.service.ServiceHistoryService;
+import cmms.System.common.entity.repository.VehicleInventoryRepository; // Assuming this exists
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
