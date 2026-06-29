@@ -1,4 +1,4 @@
-package cmms.System.mapper;
+package cmms.System.utils;
 
 import cmms.System.Dto.ServiceHistoryRequestDto;
 import cmms.System.Dto.ServiceHistoryResponseDto;
@@ -37,4 +37,5 @@ public class ServiceHistoryMapper {
                 .lastModifiedBy(entity.getLastModifiedBy())
                 .build();
     }
+
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductionOrderMapper {
 
-    public static ProductionOrder toEntity(ProductionOrderRequestDto dto) {
+    public ProductionOrder toEntity(ProductionOrderRequestDto dto) {
         if (dto == null) return null;
 
         return ProductionOrder.builder()
