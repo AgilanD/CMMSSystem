@@ -1,61 +1,64 @@
-package cmms.System.entity;
+package cmms.System.common.entity;
 
+import cmms.System.common.entity.CarModule;
+import cmms.System.common.entity.Plants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "car_module")
+@Table(name = "production_orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CarModule {
+public class ProductionOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "model_name", nullable = false, unique = true)
-    private String modelName;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "fuel_type", nullable = false)
-    private FuelType fuelType;
+    @org.hibernate.annotations.GeneratedColumn(value = "'ORD-' || id")  // For Hibernate 6 documentation
+    @Column(name = "order_number", nullable = false, unique = true, insertable = false, updatable = false)
+    private String orderNumber;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "plant_id", nullable = false)
+    private Plants plant;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "car_model_id", nullable = false)
+    private CarModule carModel;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Transmission transmission;
+    private OrderStatus status;
 
-    @Column(name = "base_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal basePrice;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "color_options", columnDefinition = "jsonb")
-    private String colorOptions;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "launch_date")
-    private LocalDate launchDate;
+    @Column(name = "target_quantity", nullable = false)
+    private Integer targetQuantity;
 
     @Builder.Default
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    @Column(name = "completed_quantity", nullable = false)
+    private Integer completedQuantity = 0;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "expected_end_date", nullable = false)
+    private LocalDate expectedEndDate;
 
-
+    @Temporal(TemporalType.DATE)
+    @Column(name = "actual_end_date")
+    private LocalDate actualEndDate;
 
     @CreatedDate
     @Builder.Default
@@ -77,15 +80,10 @@ public class CarModule {
     @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
     private Long lastModifiedBy = 1L;
 
-
-
-
-    public enum FuelType {
-        PETROL, DIESEL, ELECTRIC, HYBRID
+    public enum OrderStatus {
+        PENDING, IN_PROGRESS, COMPLETED, CANCELLED
     }
 
-    public enum Transmission {
-        MANUAL, AUTOMATIC
-    }
+
 
 }

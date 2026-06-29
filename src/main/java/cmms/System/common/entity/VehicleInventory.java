@@ -1,45 +1,57 @@
-package cmms.System.entity;
+package cmms.System.common.entity;
 
+import cmms.System.common.entity.CarModule;
+import cmms.System.common.entity.ProductionOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "plants")
+@Table(name = "vehicles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Plants {
+public class VehicleInventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Generated
+    @Column(nullable = false, unique = true, length = 17, insertable = false, updatable = false)
+    private String vin;
 
-    @Column(nullable = false, unique = true)
-    private String code;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "production_order_id", nullable = false)
+    private ProductionOrder productionOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "car_model_id", nullable = false)
+    private CarModule carModel;
 
     @Column(nullable = false)
-    private String location;
+    private String color;
 
-    @Column(name = "capacity_per_day", nullable = false)
-    private Integer capacityPerDay;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private VehicleStatus status;
 
-    @Builder.Default
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
-
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    @Column(name = "manufactured_date", nullable = false, updatable = false)
+    private LocalDate manufacturedDate;
 
 
 
@@ -65,5 +77,10 @@ public class Plants {
     private Long lastModifiedBy = 1L;
 
 
+
+
+    public enum VehicleStatus {
+        MANUFACTURED, INSPECTED, DELIVERED
+    }
 }
 

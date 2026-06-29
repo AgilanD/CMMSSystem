@@ -4,7 +4,6 @@ package cmms.System.controller;
 import cmms.System.Dto.*;
 import cmms.System.entity.AuditLogs;
 import cmms.System.service.AuditLogsService;
-import cmms.System.service.ProductionOrderService;
 import cmms.System.service.ServiceHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ import java.util.List;
 public class controller {
 
     private final AuditLogsService  auditLogsService;
-
-    private final ProductionOrderService orderService;
 
     private final ServiceHistoryService historyService;
 
@@ -37,40 +34,6 @@ public class controller {
         AuditLogResponseDto createdLog = auditLogsService.CreateAuditLogs(requestDto);
         return createdLog;
     }
-
-
-
-    @PostMapping("/CreateOrder")
-    public ProductionOrderResponseDto createOrder(@RequestBody ProductionOrderRequestDto requestDto) {
-        ProductionOrderResponseDto createdOrder = orderService.createOrder(requestDto);
-        return createdOrder;
-    }
-
-    @GetMapping("/GetAllOrder")
-    public List<ProductionOrderResponseDto> getAllOrders() {
-        List<ProductionOrderResponseDto> orders = orderService.getAllOrders();
-        return orders;
-    }
-
-    @GetMapping("/GetOrderByid/{id}")
-    public ProductionOrderResponseDto getOrderById(@PathVariable Long id) {
-        ProductionOrderResponseDto order = orderService.getOrderById(id);
-        return order;
-    }
-
-    @PutMapping("/UpdateOrder/{id}")
-    public ProductionOrderResponseDto updateOrder(
-            @PathVariable Long id,
-             @RequestBody ProductionOrderRequestDto requestDto) {
-        ProductionOrderResponseDto updatedOrder = orderService.updateOrder(id, requestDto);
-        return updatedOrder;
-    }
-
-    @DeleteMapping("/DeleteOrder/{id}")
-    public void deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
-    }
-
 
 
     @PostMapping("/CreateHistory")

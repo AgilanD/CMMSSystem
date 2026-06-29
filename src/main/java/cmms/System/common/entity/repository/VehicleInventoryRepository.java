@@ -1,6 +1,6 @@
-package cmms.System.repository;
+package cmms.System.common.entity.repository;
 
-import cmms.System.entity.VehicleInventory;
+import cmms.System.common.entity.VehicleInventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

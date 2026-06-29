@@ -1,7 +1,7 @@
-package cmms.System.repository;
+package cmms.System.common.entity.repository;
 
 
-import cmms.System.entity.CarModule;
+import cmms.System.common.entity.CarModule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
