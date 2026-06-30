@@ -2,6 +2,7 @@ package cmms.System.entity;
 
 
 import cmms.System.common.entity.Users;
+import cmms.System.security.GatewayHeaderAuthFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,25 +52,38 @@ public class AuditLogs {
 
 
     @CreatedDate
-    @Builder.Default
+//    @Builder.Default
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
-    private LocalDateTime createdAt = LocalDateTime.parse("2026-06-23T19:54:30");
+    private LocalDateTime createdAt;
 
     @CreatedBy
-    @Builder.Default
+//    @Builder.Default
     @Column(name = "created_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
-    private Long createdBy = 1L;
+    private Long createdBy;
 
     @LastModifiedDate
-    @Builder.Default
+//    @Builder.Default
     @Column(name = "last_modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
-    private LocalDateTime lastModifiedAt = LocalDateTime.parse("2026-06-23T19:54:30");
+    private LocalDateTime lastModifiedAt;
 
     @LastModifiedBy
-    @Builder.Default
+//    @Builder.Default
     @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
-    private Long lastModifiedBy = 1L;
+    private Long lastModifiedBy;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
+        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastModifiedAt = LocalDateTime.now();
+        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
 
     public enum AuditAction {
