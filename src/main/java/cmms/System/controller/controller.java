@@ -6,6 +6,7 @@ import cmms.System.entity.AuditLogs;
 import cmms.System.service.AuditLogsService;
 import cmms.System.service.ServiceHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public class controller {
     private final ServiceHistoryService historyService;
 
     @GetMapping("/checkings")
+    @PreAuthorize("hasRole('ADMIN')")
     public String Checkings(){
         return "Hello all I am validations Message in System Service ";
     }
 
     @GetMapping("/GetAllAuditLogs")
+    @PreAuthorize("hasRole('SUPERVISOR')")
     public List<AuditLogs> GetAllAuditLogs(){
         return auditLogsService.GetAllAuditLogs();
     }

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import cmms.System.security.GatewayHeaderAuthFilter;
 
 import java.time.LocalDateTime;
 
@@ -65,6 +66,19 @@ public class Users {
     private Long lastModifiedBy = 1L;
 
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
+        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastModifiedAt = LocalDateTime.now();
+        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
     public enum UserRole {
         ADMIN,

@@ -2,6 +2,7 @@ package cmms.System.common.entity;
 
 import cmms.System.common.entity.CarModule;
 import cmms.System.common.entity.ProductionOrder;
+import cmms.System.security.GatewayHeaderAuthFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,6 +77,20 @@ public class VehicleInventory {
     @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
     private Long lastModifiedBy = 1L;
 
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
+        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastModifiedAt = LocalDateTime.now();
+        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
 
 
