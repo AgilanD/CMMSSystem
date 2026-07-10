@@ -1,8 +1,6 @@
 package cmms.system.entity;
 
-
-import cmms.system.common.entity.Users;
-import cmms.system.userContext.UserContext;
+import cmms.system.usercontext.UserContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,9 +43,9 @@ public class AuditLogs {
     @Column(name = "changed_data", columnDefinition = "jsonb")
     private String changedData;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "performed_by_id", nullable = true)
-    private Users performedBy;
+    @CreatedBy
+    @Column(name = "performed_by_id", nullable = true)
+    private Long performedBy;
 
     @Column(name = "ip_address")
     private String ipAddress;
@@ -80,15 +78,15 @@ public class AuditLogs {
 
         this.createdBy = UserContext.getUserId();
         this.lastModifiedBy = UserContext.getUserId();
+        this.performedBy = UserContext.getUserId();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.lastModifiedAt = LocalDateTime.now(java.time.ZoneOffset.UTC);
         this.lastModifiedBy = UserContext.getUserId();
+        this.performedBy = UserContext.getUserId();
     }
-
-
 
     public enum AuditAction {
         CREATE, UPDATE, DELETE, LOGIN_SUCCESS, LOGIN_FAILURE

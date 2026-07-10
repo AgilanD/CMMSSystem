@@ -1,6 +1,6 @@
 package cmms.system.common.entity;
 
-import cmms.system.userContext.UserContext;
+import cmms.system.usercontext.UserContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

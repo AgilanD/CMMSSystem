@@ -2,10 +2,9 @@ package cmms.system.controller;
 
 
 import cmms.system.dto.*;
-import cmms.system.entity.AuditLogs;
 import cmms.system.service.AuditLogsService;
 import cmms.system.service.ServiceHistoryService;
-import cmms.system.userContext.RequireRole;
+import cmms.system.usercontext.RequireRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,54 +13,53 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/System")
-public class controller {
+public class SystemController {
 
     private final AuditLogsService  auditLogsService;
 
     private final ServiceHistoryService historyService;
 
     @GetMapping("/GetAllAuditLogs")
-    @RequireRole({"ADMIN", "PLANT_MANAGER"})
-    public List<AuditLogs> GetAllAuditLogs(){
+    @RequireRole({"ADMIN"})
+    public List<AuditLogResponseDto> getAllAuditLogs(){
         return auditLogsService.getAllAuditLogs();
     }
 
     @PostMapping("/AddAuditLogs")
+    @RequireRole({"ADMIN"})
     public AuditLogResponseDto createAuditLog( @RequestBody AuditLogsRequestDto requestDto) {
        return auditLogsService.createAuditLogs(requestDto);
     }
 
-//    @GetMapping("/getAuditLogByIds")
-//    public AuditLogResponseDto getAuditLogUsingIds(@PathVariable Long id){
-//        return auditLogsService.getAuditLogsById(getAuditLogUsingIds())
-//    }
+    @GetMapping("/getAuditLogByIds/{id}")
+    @RequireRole({"ADMIN"})
+    public AuditLogResponseDto getAuditLogUsingIds(@PathVariable Long id){
+        return auditLogsService.getAuditLogsById(id);
+    }
 
     @PostMapping("/CreateHistory")
     @RequireRole({"ADMIN"})
     public ServiceHistoryResponseDto createHistory( @RequestBody ServiceHistoryRequestDto requestDto) {
-        ServiceHistoryResponseDto createdHistory = historyService.createHistory(requestDto);
-        return createdHistory;
+        return historyService.createHistory(requestDto);
     }
 
     @GetMapping("/GetAllHistory")
     @RequireRole({"ADMIN"})
     public List<ServiceHistoryResponseDto> getAllHistories() {
-        List<ServiceHistoryResponseDto> histories = historyService.getAllHistory();
-        return histories;
+        return historyService.getAllHistory();
+
     }
 
     @GetMapping("/GetHistoryById/{id}")
     public ServiceHistoryResponseDto getHistoryById(@PathVariable Long id) {
-        ServiceHistoryResponseDto history = historyService.getHistoryById(id);
-        return history;
+       return  historyService.getHistoryById(id);
     }
 
     @PutMapping("UpdateHistoryById/{id}")
     public ServiceHistoryResponseDto updateHistory(
             @PathVariable Long id,
             @RequestBody ServiceHistoryRequestDto requestDto) {
-        ServiceHistoryResponseDto updatedHistory = historyService.updateHistory(id, requestDto);
-        return updatedHistory;
+       return  historyService.updateHistory(id, requestDto);
     }
 
     @DeleteMapping("/deleteHistory/{id}")

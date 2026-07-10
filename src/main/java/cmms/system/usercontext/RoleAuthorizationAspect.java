@@ -1,4 +1,4 @@
-package cmms.system.userContext;
+package cmms.system.usercontext;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class RoleAuthorizationAspect {
+public class  RoleAuthorizationAspect {
 
     @Before("@annotation(requireRole)")
     public void authorizeRole(RequireRole requireRole) {

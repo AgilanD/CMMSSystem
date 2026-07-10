@@ -28,4 +28,5 @@ public class AuditLogResponseDto {
     private Long createdBy;
     private LocalDateTime lastModifiedAt;
     private Long lastModifiedBy;
+
 }

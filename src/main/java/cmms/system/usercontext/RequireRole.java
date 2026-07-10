@@ -1,4 +1,4 @@
-package cmms.system.userContext;
+package cmms.system.usercontext;
 
 import java.lang.annotation.*;
 

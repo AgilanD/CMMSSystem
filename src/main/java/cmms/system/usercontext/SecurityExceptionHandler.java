@@ -1,4 +1,4 @@
-package cmms.system.userContext;
+package cmms.system.usercontext;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,10 +15,9 @@ public class SecurityExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, Object>> handleSecurityExceptions(ResponseStatusException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now().toString());
+        body.put("timestamp", LocalDateTime.now(java.time.ZoneOffset.UTC));
         body.put("status", ex.getStatusCode().value());
         body.put("error", ex.getReason());
-
         return new ResponseEntity<>(body, ex.getStatusCode());
     }
 }

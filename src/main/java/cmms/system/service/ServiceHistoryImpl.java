@@ -3,15 +3,15 @@ package cmms.system.service;
 import cmms.system.dto.ServiceHistoryRequestDto;
 import cmms.system.dto.ServiceHistoryResponseDto;
 import cmms.system.entity.ServiceHistory;
+import cmms.system.common.entity.VehicleInventory;
 import cmms.system.utils.ServiceHistoryMapper;
 import cmms.system.repository.ServiceHistoryRepository;
-import cmms.system.common.entity.repository.VehicleInventoryRepository; // Assuming this exists
+import cmms.system.common.entity.repository.VehicleInventoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +24,16 @@ public class ServiceHistoryImpl implements ServiceHistoryService {
     @Override
     @Transactional
     public ServiceHistoryResponseDto createHistory(ServiceHistoryRequestDto requestDto) {
-        ServiceHistory entity = historyMapper.toEntity(requestDto);
 
-        entity.setVehicle(vehicleRepository.findById(requestDto.getVehicleId())
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + requestDto.getVehicleId())));
+        VehicleInventory vehicle = vehicleRepository.findById(requestDto.getVehicleId())
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + requestDto.getVehicleId()));
+
+        if (vehicle.getStatus() == null || !"DELIVERED".equalsIgnoreCase(String.valueOf(vehicle.getStatus()))) {
+            throw new IllegalStateException("Service records can only be created for vehicles with DELIVERED status. Current status: " + vehicle.getStatus());
+        }
+
+        ServiceHistory entity = historyMapper.toEntity(requestDto);
+        entity.setVehicle(vehicle);
 
         ServiceHistory savedEntity = historyRepository.save(entity);
         return historyMapper.toResponseDto(savedEntity);
@@ -37,8 +43,7 @@ public class ServiceHistoryImpl implements ServiceHistoryService {
     @Transactional(readOnly = true)
     public List<ServiceHistoryResponseDto> getAllHistory() {
         return historyRepository.findAll().stream()
-                .map(historyMapper::toResponseDto)
-                .collect(Collectors.toList());
+                .map(historyMapper::toResponseDto).toList();
     }
 
     @Override
@@ -61,8 +66,15 @@ public class ServiceHistoryImpl implements ServiceHistoryService {
         existingEntity.setCost(requestDto.getCost());
         existingEntity.setRemarks(requestDto.getRemarks());
 
-        existingEntity.setVehicle(vehicleRepository.findById(requestDto.getVehicleId())
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + requestDto.getVehicleId())));
+        VehicleInventory vehicle = vehicleRepository.findById(requestDto.getVehicleId())
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + requestDto.getVehicleId()));
+
+
+        if (vehicle.getStatus() == null || !"DELIVERED".equalsIgnoreCase(String.valueOf(vehicle.getStatus()))) {
+            throw new IllegalStateException("Service records can only be linked to vehicles with DELIVERED status. Current status: " + vehicle.getStatus());
+        }
+
+        existingEntity.setVehicle(vehicle);
 
         ServiceHistory updatedEntity = historyRepository.save(existingEntity);
         return historyMapper.toResponseDto(updatedEntity);

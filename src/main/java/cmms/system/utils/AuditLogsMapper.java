@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditLogsMapper {
 
-    public  AuditLogs AuditlogsRequestDtoToAuditLogs (AuditLogsRequestDto dto) {
+    public  AuditLogs auditlogsRequestDtoToAuditLogs (AuditLogsRequestDto dto) {
 
         if (dto == null) {
             return null;
@@ -37,14 +37,14 @@ public class AuditLogsMapper {
                 .action(entity.getAction())
                 .changedData(entity.getChangedData())
                 .ipAddress(entity.getIpAddress())
-                .performedById(entity.getPerformedBy() != null ? entity.getPerformedBy().getId() : null)
-                .performedByUsername(entity.getPerformedBy() != null ? entity.getPerformedBy().getUsername() : null)
+                .performedById(entity.getPerformedBy() != null ? entity.getPerformedBy() : null)
                 .createdAt(entity.getCreatedAt())
                 .createdBy(entity.getCreatedBy())
                 .lastModifiedAt(entity.getLastModifiedAt())
                 .lastModifiedBy(entity.getLastModifiedBy())
                 .build();
     }
+
     public void updateEntityFromDto(AuditLogsRequestDto dto, AuditLogs entity) {
         if (dto == null || entity == null) {
             return;
