@@ -1,9 +1,12 @@
-package cmms.system.userContext;
+package cmms.system.usercontext;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserContext {
     private static final ThreadLocal<Long> userIdHolder = new ThreadLocal<>();
     private static final ThreadLocal<String> usernameHolder = new ThreadLocal<>();

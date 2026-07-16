@@ -17,16 +17,29 @@ public class AuditLogsServiceImpl implements AuditLogsService{
     private final AuditLogsRepository auditLogsRepository;
     private final AuditLogsMapper auditLogsMapper;
 
-    public List<AuditLogs> getAllAuditLogs(){
-        return auditLogsRepository.findAll();
+    public List<AuditLogResponseDto> getAllAuditLogs() {
+        return auditLogsRepository.findAll()
+                .stream()
+                .map(auditLogsMapper::toResponseDto)
+                .toList();
     }
-//
-//    public AuditLogs getAuditLogsById(Long id){
-//        return auditLogsRepository.findById(id).orElse(null);
-//    }
 
-    public AuditLogResponseDto createAuditLogs (AuditLogsRequestDto auditLogsRequestDto){
-        return auditLogsMapper.toResponseDto(auditLogsRepository.save(auditLogsMapper.AuditlogsRequestDtoToAuditLogs(auditLogsRequestDto)));
+    public AuditLogResponseDto getAuditLogsById(Long id){
+        AuditLogs auditLogs = auditLogsRepository.findById(id).orElse(null);
+        return auditLogsMapper.toResponseDto(auditLogs);
+    }
+
+    @Override
+    public AuditLogResponseDto createAuditLogs(AuditLogsRequestDto auditLogsRequestDto) {
+
+        AuditLogs auditLogEntity = auditLogsMapper.auditlogsRequestDtoToAuditLogs(auditLogsRequestDto);
+        if (auditLogsRequestDto.getPerformedById() != null) {
+            auditLogEntity.setCreatedBy(auditLogsRequestDto.getPerformedById());
+            auditLogEntity.setLastModifiedBy(auditLogsRequestDto.getPerformedById());
+        }
+
+        AuditLogs savedEntity = auditLogsRepository.save(auditLogEntity);
+        return auditLogsMapper.toResponseDto(savedEntity);
     }
 
 }

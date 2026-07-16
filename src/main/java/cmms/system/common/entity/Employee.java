@@ -1,15 +1,13 @@
 package cmms.system.common.entity;
 
 
-import cmms.system.userContext.UserContext;
+import cmms.system.usercontext.UserContext;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SoftDelete;
-import org.hibernate.annotations.SoftDeleteType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -24,7 +22,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SoftDelete(strategy = SoftDeleteType.DELETED, columnName = "is_deleted")
 public class Employee {
 
     @Id

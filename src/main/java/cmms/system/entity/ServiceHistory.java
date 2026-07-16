@@ -2,12 +2,13 @@ package cmms.system.entity;
 
 import cmms.system.common.entity.VehicleInventory;
 
-import cmms.system.userContext.UserContext;
+import cmms.system.usercontext.UserContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,12 +24,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE service_history SET is_deleted = true, deleted_at = NOW() WHERE id = ?")
 public class ServiceHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id", nullable = false)
@@ -52,20 +53,20 @@ public class ServiceHistory {
     private String remarks;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
-    private LocalDateTime createdAt = LocalDateTime.parse("2026-06-23T19:54:30");
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @CreatedBy
-    @Column(name = "created_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+    @Column(name = "created_by", nullable = false)
     private Long createdBy = 1L;
 
     @LastModifiedDate
-    @Column(name = "last_modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
-    private LocalDateTime lastModifiedAt = LocalDateTime.parse("2026-06-23T19:54:30");
+    @Column(name = "last_modified_at", nullable = false)
+    private LocalDateTime lastModifiedAt;
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
-    private Long lastModifiedBy = 1L;
+    @Column(name = "last_modified_by", nullable = false)
+    private Long lastModifiedBy;
 
 
     @PrePersist
